@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>IPFS</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+<body style="background: white;">
+    <h1>Hello IPFS!</h1>
+    <a id="node_info" href="render\node_info\node_info.html">node_info</a>
+    <br>
+    <a id="files_info" href="render\files\files.html">files_info</a>
+    <script>
+        require('electron').ipcRenderer.on('ipfs_id', (event, message) => {
+            window.localStorage.setItem("ipfs-id", message)
+        })
+    </script>
+</body>
+</html>

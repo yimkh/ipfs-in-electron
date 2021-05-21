@@ -1,0 +1,19 @@
+{
+  "name": "ipfs-ai-file-sys",
+  "version": "1.0.0",
+  "description": "ipfs with ai file system",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "ymh",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^12.0.8"
+  },
+  "dependencies": {
+    "ipfs-core": "^0.6.1"
+  }
+}
