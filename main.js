@@ -7,19 +7,19 @@ const BrowserWindow = electron.BrowserWindow
 let win = null
 
 function createWindow () {
-   win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation:false
-    }
-  })
+    win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+            contextIsolation:false
+        }
+    })
 
-  win.loadFile('index.html')
+    win.loadFile('index.html')
 
-  win.webContents.openDevTools()
+    win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -31,7 +31,7 @@ app.whenReady().then(() => {
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
+            createWindow()
         }
     })
 
@@ -41,9 +41,9 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 })
 
 
@@ -64,7 +64,7 @@ async function ipfsFunc(win) {
         get_node_info(ipfs, node_id)
 
         //add a file
-        //get file_path from render
+        //get file_path message from render
         ipcMain.on('add_file_message', (event, arg) => {
             let file_path = arg
 
@@ -82,20 +82,18 @@ async function ipfsFunc(win) {
         win.webContents.send('ipfs_id', node_id.x)
         win.webContents.send('ipfs_files_info', )
 
-        //for files information
+        //for other files information
         })
     } 
     catch (err) { 
-      console.log("Oops, there was an error :(", err); 
+        console.log("Oops, there was an error :(", err); 
     } 
 }
 
 async function get_node_info(ipfs, node_id) {
     const id = await ipfs.id()
-    // console.log("id:", id)
 
     node_id.x = id.id
-    // console.log("node_id", node_id.x)
 }
 
 async function add_a_file(ipfs, file_path, event) {
@@ -113,7 +111,7 @@ async function get_file(ipfs, test_cid) {
         const content = []
       
         for await (const chunk of file.content) {
-          content.push(chunk)
+            content.push(chunk)
         }
       
         // console.log("content", content)
