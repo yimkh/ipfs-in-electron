@@ -74,16 +74,10 @@ async function ipfsFunc(win) {
         //get a file
         //get file_ipfs_path message from render
         ipcMain.on('download_files_message', (event, arg) => {
-            // console.log("download_files_message")
-
             let file_ipfs_path = arg
 
             get_a_file(ipfs, file_ipfs_path, event)
         })
-
-        //get a file with cid
-        // let test_cid = "QmetCcwGqVrBukGPeYDP6c3vqhaJRNnHA3gd9bA3JakEfq"
-        // get_file(ipfs, test_cid)
 
         //send to index.html 
         win.loadURL(`file://${__dirname}/index.html`)
@@ -114,7 +108,6 @@ async function add_a_file(ipfs, file_path, event) {
 
 async function get_a_file(ipfs, file_ipfs_path, event){
     for await (const file of ipfs.get(file_ipfs_path)) {
-        // console.log("file.type, file.path", file.type, file.path)
         file_type = file.type
       
         if (!file.content) continue;
@@ -126,8 +119,6 @@ async function get_a_file(ipfs, file_ipfs_path, event){
         }
         
         file_info = {"content": content, "file_type": file_type}
-      
-        console.log("file_info", file_info)
         event.returnValue = file_info
     }
 }

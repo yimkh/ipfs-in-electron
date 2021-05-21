@@ -1,10 +1,7 @@
-// const { ipcRenderer } = require('electron')
-
 ipfs_file_path_download_btn = document.querySelector("#ipfs_file_path_download_btn")
 ipfs_file_path_download_btn.onclick = () => {
     ipfs_file_path = document.getElementById("ipfs_file_path").value;
 
-    // console.log(ipfs_file_path)
     //send message to main process, and get the ipfs file information
     let ipfs_files_info = ipcRenderer.sendSync('download_files_message', ipfs_file_path)
 
