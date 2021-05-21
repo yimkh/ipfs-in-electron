@@ -60,8 +60,9 @@ async function ipfsFunc(win) {
         ipfs = await IPFS.create()
 
         //get node info
-        var node_id = { x : "" }
-        get_node_info(ipfs, node_id)
+        ipcMain.on('node_info_message', (event, arg) => {
+            get_node_info(ipfs, event)
+        })
 
         //add a file
         //get file_path message from render
@@ -79,6 +80,7 @@ async function ipfsFunc(win) {
             get_a_file(ipfs, file_ipfs_path, event)
         })
 
+        /*
         //send to index.html 
         win.loadURL(`file://${__dirname}/index.html`)
         //for node information
@@ -88,16 +90,17 @@ async function ipfsFunc(win) {
 
         //for other files information
         })
+        */
     } 
     catch (err) { 
         console.log("Oops, there was an error :(", err); 
     } 
 }
 
-async function get_node_info(ipfs, node_id) {
+async function get_node_info(ipfs, event) {
     const id = await ipfs.id()
 
-    node_id.x = id.id
+    event.returnValue = id.id
 }
 
 async function add_a_file(ipfs, file_path, event) {

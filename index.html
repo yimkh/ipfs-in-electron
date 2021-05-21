@@ -10,10 +10,5 @@
     <a id="node_info" href="./render/node_info/node_info.html">node_info</a>
     <br>
     <a id="files_info" href="./render/files_info/files_info.html">files_info</a>
-    <script>
-        require('electron').ipcRenderer.on('ipfs_id', (event, message) => {
-            window.localStorage.setItem("ipfs-id", message)
-        })
-    </script>
 </body>
 </html>
