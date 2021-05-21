@@ -75,22 +75,10 @@ async function ipfsFunc(win) {
         //get a file
         //get file_ipfs_path message from render
         ipcMain.on('download_files_message', (event, arg) => {
-            let file_ipfs_path = arg
+            let encrypt_ipfs_file_path = arg
 
-            get_a_file(ipfs, file_ipfs_path, event)
+            get_a_file(ipfs, encrypt_ipfs_file_path, event)
         })
-
-        /*
-        //send to index.html 
-        win.loadURL(`file://${__dirname}/index.html`)
-        //for node information
-        win.webContents.on('did-finish-load', () => {
-        win.webContents.send('ipfs_id', node_id.x)
-        win.webContents.send('ipfs_files_info', )
-
-        //for other files information
-        })
-        */
     } 
     catch (err) { 
         console.log("Oops, there was an error :(", err); 
@@ -104,13 +92,19 @@ async function get_node_info(ipfs, event) {
 }
 
 async function add_a_file(ipfs, file_path, event) {
-    let add_file_result = await ipfs.add(file_path)
+    let ipfs_file_info = await ipfs.add(file_path)
 
-    event.returnValue = add_file_result
+    ipfs_file_path = ipfs_file_info['path']
+
+    encrypt_ipfs_file_path = encrypt_path(ipfs_file_path)
+
+    event.returnValue = encrypt_ipfs_file_path
 }
 
-async function get_a_file(ipfs, file_ipfs_path, event){
-    for await (const file of ipfs.get(file_ipfs_path)) {
+async function get_a_file(ipfs, encrypt_ipfs_file_path, event){
+    ipfs_file_path = decrypt_path(encrypt_ipfs_file_path)
+
+    for await (const file of ipfs.get(ipfs_file_path)) {
         file_type = file.type
       
         if (!file.content) continue;
@@ -124,4 +118,42 @@ async function get_a_file(ipfs, file_ipfs_path, event){
         file_info = {"content": content, "file_type": file_type}
         event.returnValue = file_info
     }
+}
+
+
+//deal with file path by using mark
+var aesjs = require('aes-js')
+
+const key = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ]
+
+function encrypt_path(ipfs_file_path) {
+
+    // Convert text to bytes
+    var text = ipfs_file_path
+    var textBytes = aesjs.utils.utf8.toBytes(text)
+
+    // The counter is optional, and if omitted will begin at 1
+    var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5))
+    var encryptedBytes = aesCtr.encrypt(textBytes)
+
+    // To print or store the binary data, you may convert it to hex
+    var encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes)
+
+    return encryptedHex
+}
+
+function decrypt_path(encrypt_ipfs_file_path) {
+    var encryptedHex = encrypt_ipfs_file_path
+    // When ready to decrypt the hex string, convert it back to bytes
+    var encryptedBytes = aesjs.utils.hex.toBytes(encryptedHex)
+
+    // The counter mode of operation maintains internal state, so to
+    // decrypt a new instance must be instantiated.
+    var aesCtr = new aesjs.ModeOfOperation.ctr(key, new aesjs.Counter(5))
+    var decryptedBytes = aesCtr.decrypt(encryptedBytes)
+
+    // Convert our bytes back into text
+    var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes)
+
+    return decryptedText
 }
