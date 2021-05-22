@@ -66,7 +66,7 @@ async function ipfsFunc() {
 
         //add a file
         //get file_info message from render
-        ipcMain.on('file_info', (event, arg) => {
+        ipcMain.on('add_file_info', (event, arg) => {
             let file_info = arg
 
             add_a_file(ipfs, file_info, event)

@@ -23,7 +23,7 @@ add_file_btn.onclick = () => {
         //send file_info
         let file_info = {"file_mark":file_mark, "file_path": file_path}
 
-        let encrypt_ipfs_file_path = ipcRenderer.sendSync('file_info', file_info)
+        let encrypt_ipfs_file_path = ipcRenderer.sendSync('add_file_info', file_info)
 
         let files_info_content = document.querySelector("#files_info_content")
         files_info_content.innerHTML = encrypt_ipfs_file_path
