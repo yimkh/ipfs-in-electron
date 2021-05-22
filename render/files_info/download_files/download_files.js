@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron')
+
 ipfs_file_path_download_btn = document.querySelector("#ipfs_file_path_download_btn")
 ipfs_file_path_download_btn.onclick = () => {
     encrypt_ipfs_file_path = document.getElementById("ipfs_file_path").value;

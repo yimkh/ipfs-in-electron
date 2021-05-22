@@ -92,15 +92,19 @@ async function get_node_info(ipfs, event) {
 }
 
 async function add_a_file(ipfs, file_info, event) {
-    let ipfs_file_info = await ipfs.add(file_info["file_path"])
+    if (file_info["file_mark"]==1) {
+        event.returnValue = "file is not legal, add error"
+    } else {
+        let ipfs_file_info = await ipfs.add(file_info["file_path"])
 
-    ipfs_file_path = ipfs_file_info['path']
-
-    add_path = file_info["file_mark"] + ipfs_file_path 
-
-    encrypt_ipfs_file_path = encrypt_path(add_path)
-
-    event.returnValue = encrypt_ipfs_file_path
+        ipfs_file_path = ipfs_file_info['path']
+    
+        add_path = file_info["file_mark"] + ipfs_file_path 
+    
+        encrypt_ipfs_file_path = encrypt_path(add_path)
+    
+        event.returnValue = encrypt_ipfs_file_path
+    }
 }
 
 async function get_a_file(ipfs, encrypt_ipfs_file_path, event){

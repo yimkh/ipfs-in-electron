@@ -19,6 +19,9 @@ add_file_btn.onclick = () => {
 
         //将文件进行检查的逻辑，返回标志位 file_mark --------------------------!
         let file_mark = 0
+        if (reader.result=="不合法") {
+            file_mark = 1
+        }
 
         //send file_info
         let file_info = {"file_mark":file_mark, "file_path": file_path}
