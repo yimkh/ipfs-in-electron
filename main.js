@@ -26,7 +26,7 @@ app.whenReady().then(() => {
     createWindow()
 
     //ipfs logic
-    ipfsFunc(win)
+    ipfsFunc()
     //ipfs logic    
 
     app.on('activate', () => {
@@ -55,7 +55,7 @@ const IPFS = require('ipfs-core')
 let ipfs
 const ipcMain = electron.ipcMain
 
-async function ipfsFunc(win) { 
+async function ipfsFunc() { 
     try { 
         ipfs = await IPFS.create()
 
@@ -66,12 +66,12 @@ async function ipfsFunc(win) {
 
         //add a file
         //get file_path message from render
-        ipcMain.on('file_path', (event, arg) => {
-            let file_path = arg
+        ipcMain.on('file_info', (event, arg) => {
+            let file_info = arg
 
-            add_a_file(ipfs, file_path, event)
+            add_a_file(ipfs, file_info, event)
         })
-
+        
         //get a file
         //get file_ipfs_path message from render
         ipcMain.on('download_files_message', (event, arg) => {
@@ -91,12 +91,14 @@ async function get_node_info(ipfs, event) {
     event.returnValue = id.id
 }
 
-async function add_a_file(ipfs, file_path, event) {
-    let ipfs_file_info = await ipfs.add(file_path)
+async function add_a_file(ipfs, file_info, event) {
+    let ipfs_file_info = await ipfs.add(file_info["file_path"])
 
     ipfs_file_path = ipfs_file_info['path']
 
-    encrypt_ipfs_file_path = encrypt_path(ipfs_file_path)
+    add_path = file_info["file_mark"] + ipfs_file_path 
+
+    encrypt_ipfs_file_path = encrypt_path(add_path)
 
     event.returnValue = encrypt_ipfs_file_path
 }
