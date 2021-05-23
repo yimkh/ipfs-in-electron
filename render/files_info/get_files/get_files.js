@@ -2,10 +2,10 @@ const { ipcRenderer } = require('electron')
 
 get_file_btn = document.querySelector("#get_file_btn")
 get_file_btn.onclick = () => {
-    encrypt_ipfs_file_cid = document.getElementById("encrypt_ipfs_file_cid").value;
+    encrypt_ipfs_file_cid_get = document.getElementById("encrypt_ipfs_file_cid_get").value;
 
     //send message to main process, and get the ipfs file information
-    let ipfs_files_info = ipcRenderer.sendSync('get_file_info_message', encrypt_ipfs_file_cid)
+    let ipfs_files_info = ipcRenderer.sendSync('get_file_info_message', encrypt_ipfs_file_cid_get)
 
     download_files_info_type = document.querySelector("#get_file_info_type")
     download_files_info_type.innerHTML = ipfs_files_info["file_type"]
