@@ -109,18 +109,14 @@ async function add_a_file(ipfs, file_info, event) {
         console.log(ipfs_file_info)
 
         let ipfs_file_cid = ipfs_file_info["cid"]
-        //对CID(QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg)进行截取
-        // ipfs_file_cid = document.write(ipfs_file_info['cid'].substring(4))
-        console.log(ipfs_file_cid)
+    
+        add_path = file_info["file_mark"] + ipfs_file_cid 
 
-        console.log(ipfs_file_path)
-        console.log("encrypt_ipfs_file_path", encrypt_path(ipfs_file_path))
+        console.log(add_path)
     
-        add_path = file_info["file_mark"] + ipfs_file_path 
+        encrypt_ipfs_file_cid = encrypt_path(add_path)
     
-        encrypt_ipfs_file_path = encrypt_path(add_path)
-    
-        event.returnValue = encrypt_ipfs_file_path
+        event.returnValue = encrypt_ipfs_file_cid
     }
 }
 
