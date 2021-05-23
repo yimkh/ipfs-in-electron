@@ -1,3 +1,5 @@
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 const electron = require('electron')
 const path = require('path')
  
@@ -73,9 +75,9 @@ async function ipfsFunc() {
         
         //get a file
         ipcMain.on('get_file_info_message', (event, arg) => {
-            let encrypt_ipfs_file_cid = arg
+            let encrypt_ipfs_file_cid_get = arg
 
-            get_a_file(ipfs, encrypt_ipfs_file_cid, event)
+            get_a_file(ipfs, encrypt_ipfs_file_cid_get, event)
         })
 
         //down a file
@@ -120,8 +122,8 @@ async function add_a_file(ipfs, file_info, event) {
     }
 }
 
-async function get_a_file(ipfs, encrypt_ipfs_file_cid, event){
-    let cid_with_mark = decrypt_path(encrypt_ipfs_file_cid)
+async function get_a_file(ipfs, encrypt_ipfs_file_cid_get, event){
+    let cid_with_mark = decrypt_path(encrypt_ipfs_file_cid_get)
 
     let ipfs_file_cid = cid_with_mark.substr(1)
 
@@ -142,7 +144,7 @@ async function get_a_file(ipfs, encrypt_ipfs_file_cid, event){
             content.push(chunk)
         }
         
-        file_info = {"content": content, "file_type": file_type}
+        file_info = {"file_content": content, "file_type": file_type}
         event.returnValue = file_info
     }
 }

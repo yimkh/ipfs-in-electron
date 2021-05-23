@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron')
+var iconv = require('iconv-lite');
 
 get_file_btn = document.querySelector("#get_file_btn")
 get_file_btn.onclick = () => {
@@ -10,15 +11,7 @@ get_file_btn.onclick = () => {
     download_files_info_type = document.querySelector("#get_file_info_type")
     download_files_info_type.innerHTML = ipfs_files_info["file_type"]
 
+    let content = iconv.decode(Buffer.from(ipfs_files_info["file_content"][0]), 'utf8');
     let download_files_info_content = document.querySelector("#get_file_info_content")
-    download_files_info_content.innerHTML = Uint8ArrayToString(ipfs_files_info["content"])
+    download_files_info_content.innerHTML = content
 }
-
-function Uint8ArrayToString(fileData){
-    var dataString = "";
-    for (var i = 0; i < fileData.length; i++) {
-      dataString += String.fromCharCode(fileData[i]);
-    }
-   
-    return dataString
-  }

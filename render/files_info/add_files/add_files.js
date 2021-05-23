@@ -6,8 +6,6 @@ add_file_btn.onclick = () => {
     let file = document.getElementById("add_a_file").files
     let file_relative_path = "/mypath"
     let file_name = file[0]['name']
-
-    //file_info include file_mark and file_path
     let file_path = file[0]['path']
 
     //read file
