@@ -16,10 +16,17 @@ add_file_btn.onclick = () => {
     let reader = new FileReader()
     reader.readAsText(file[0]);
     reader.onload = function fileReadCompleted() {
-        //when be read, the content is in reader.result
-        //console.log(reader.result);
+        /*将文件进行检查的逻辑，返回标志位 file_mark --------------------------!
+        const check = new XMLHttpRequest()
+        const url = ""
+        down_https.open("GET", url)
+        down_https.send()
 
-        //将文件进行检查的逻辑，返回标志位 file_mark --------------------------!
+        down_https.onreadystatechange = (e) => {
+            console.log(down_https)
+        }
+        */
+
         let file_mark = 0
         if (reader.result=="不合法") {
             file_mark = 1

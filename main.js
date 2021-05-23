@@ -65,25 +65,25 @@ async function ipfsFunc() {
         })
 
         //add a file
-        //get file_info message from render
         ipcMain.on('add_file_info_message', (event, arg) => {
             let file_info = arg
 
-            // test_add(ipfs)
             add_a_file(ipfs, file_info, event)
         })
         
         //get a file
-        //get file_ipfs_path message from render
         ipcMain.on('get_file_info_message', (event, arg) => {
             let encrypt_ipfs_file_cid = arg
 
             get_a_file(ipfs, encrypt_ipfs_file_cid, event)
         })
 
-        // test_ls(ipfs)
-        // test_cat(ipfs)
-        // test_get(ipfs)
+        //down a file
+        ipcMain.on('down_file_info_message', (event, arg) => {
+            let encrypt_ipfs_file_cid = arg
+
+            down_a_file(ipfs, encrypt_ipfs_file_cid, event)
+        })
 
     } 
     catch (err) { 
@@ -120,38 +120,6 @@ async function add_a_file(ipfs, file_info, event) {
     }
 }
 
-async function test_cat(ipfs) {
-    for await (const chunk of ipfs.cat('QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg/add.doc')) {
-        console.info(chunk)
-      }
-}
-
-async function test_ls(ipfs){
-    const cid = 'QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg'
-
-for await (const file of ipfs.ls(cid)) {
-  console.log(file.path)
-}
-}
-
-async function test_get(ipfs) {
-    const cid = 'QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg/add.doc'
-
-for await (const file of ipfs.get(cid)) {
-  console.log(file.type, file.path)
-
-  if (!file.content) continue;
-
-  const content = []
-
-  for await (const chunk of file.content) {
-    content.push(chunk)
-  }
-
-  console.log(content)
-}
-} 
-
 async function get_a_file(ipfs, encrypt_ipfs_file_cid, event){
     let cid_with_mark = decrypt_path(encrypt_ipfs_file_cid)
 
@@ -179,16 +147,18 @@ async function get_a_file(ipfs, encrypt_ipfs_file_cid, event){
     }
 }
 
-async function read_a_file(ipfs, encrypt_ipfs_file_path, event){
-    ipfs_file_path = decrypt_path(encrypt_ipfs_file_path)
+async function down_a_file(ipfs, encrypt_ipfs_file_cid, event){
+    let cid_with_mark = decrypt_path(encrypt_ipfs_file_cid)
 
-    const chunks = []
+    let ipfs_file_cid = cid_with_mark.substr(1)
 
-    for await (const chunk of ipfs.files.read('/hello-world')) {
-    chunks.push(chunk)
+    let ipfs_file_cidwpath
+
+    for await (const file of ipfs.ls(ipfs_file_cid)) {
+        ipfs_file_cidwpath = file.path
     }
 
-    console.log(uint8ArrayConcat(chunks).toString())
+    event.returnValue = ipfs_file_cidwpath
 }
 
 

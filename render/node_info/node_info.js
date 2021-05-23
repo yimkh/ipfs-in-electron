@@ -7,8 +7,3 @@ node_info_btn.onclick = () => {
 
     node_info_content.innerHTML = node_info
 }
-
-var node_info_detail_btn = document.querySelector('#node_info_detail_btn')
-node_info_detail_btn.onclick = () => {
-    window.open("node_info_detail.html")
-}
