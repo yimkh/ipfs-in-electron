@@ -7,20 +7,22 @@
     <title>Files</title>
 </head>
 <body>
-    <h2>上传.doc文件</h2>
+    <h2>上传文件</h2>
+    <p>支持文件类型(.doc)</p>
     <input type="file" id="add_a_file" accept=".doc"><br>
     <button id="add_file_btn">上传</button>
     <p>上传文件的Cid:</p>
     <div id="files_info_content"></div>
-    <h2>下载文件</h2>
-    <input type="text" id="ipfs_file_path" value="a630f48de351d68ff908ae41c56f68ca98b3d9e87de6320050c0beb97cd0e29fa9340736ab06d99c3d68e593e9b1" οnfοcus="if (value =='a630f48de351d68ff908ae41c56f68ca98b3d9e87de6320050c0beb97cd0e29fa9340736ab06d99c3d68e593e9b1){value =''}" οnblur="if (value ==''){value='a630f48de351d68ff908ae41c56f68ca98b3d9e87de6320050c0beb97cd0e29fa9340736ab06d99c3d68e593e9b1}"><br>
-    <button id="ipfs_file_path_download_btn">下载</button>
-    <p>下载文件的类型为:</p>
-    <div id="download_files_info_type"></div>
-    <p>下载文件的内容为:</p>
-    <div id="download_files_info_content"></div><br>
+    <h2>获取文件</h2>
+    <input type="text" id="encrypt_ipfs_file_cid" value="c70cf8b5e0178ba7ec3c8005d67b04efd19fe2d573d5312025f4b7b252ebfde098117736cf26c9fb3a2df2f2d4883e" οnfοcus="if (value =='c70cf8b5e0178ba7ec3c8005d67b04efd19fe2d573d5312025f4b7b252ebfde098117736cf26c9fb3a2df2f2d4883e){value =''}" οnblur="if (value ==''){value='c70cf8b5e0178ba7ec3c8005d67b04efd19fe2d573d5312025f4b7b252ebfde098117736cf26c9fb3a2df2f2d4883e}"><br>
+    <button id="get_file_btn">获取</button>
+    <p>获取文件的类型为:</p>
+    <div id="get_file_info_type"></div>
+    <p>获取文件的内容为:</p>
+    <div id="get_file_info_content"></div><br>
     <a href="../../index.html">返回主页面</a>
+    <a href="https://ipfs.io/ipfs/QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg/add.doc">.doc_down</a>
     <script type="module" src="./add_files/add_files.js"></script>
-    <script type="text/javascript" src="./download_files/download_files.js"></script>
+    <script type="text/javascript" src="./get_files/get_files.js"></script>
 </body>
 </html>

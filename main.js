@@ -75,11 +75,16 @@ async function ipfsFunc() {
         
         //get a file
         //get file_ipfs_path message from render
-        ipcMain.on('download_files_message', (event, arg) => {
-            let encrypt_ipfs_file_path = arg
+        ipcMain.on('get_file_info_message', (event, arg) => {
+            let encrypt_ipfs_file_cid = arg
 
-            get_a_file(ipfs, encrypt_ipfs_file_path, event)
+            get_a_file(ipfs, encrypt_ipfs_file_cid, event)
         })
+
+        // test_ls(ipfs)
+        // test_cat(ipfs)
+        // test_get(ipfs)
+
     } 
     catch (err) { 
         console.log("Oops, there was an error :(", err); 
@@ -89,7 +94,7 @@ async function ipfsFunc() {
 async function get_node_info(ipfs, event) {
     const id = await ipfs.id()
 
-    console.log(id)
+    // console.log(id)
 
     event.returnValue = id.id
 }
@@ -103,49 +108,62 @@ async function add_a_file(ipfs, file_info, event) {
             content: file_info["file_content"]
         }
 
-        console.log(file)
-
         let ipfs_file_info = await ipfs.add(file)
-        console.log(ipfs_file_info)
-
+        
         let ipfs_file_cid = ipfs_file_info["cid"]
     
-        add_path = file_info["file_mark"] + ipfs_file_cid 
-
-        console.log(add_path)
+        let path_with_mark = file_info["file_mark"] + ipfs_file_cid 
     
-        encrypt_ipfs_file_cid = encrypt_path(add_path)
+        encrypt_ipfs_file_cid = encrypt_path(path_with_mark)
     
         event.returnValue = encrypt_ipfs_file_cid
     }
 }
 
-async function test_add(ipfs) {
-    const file = {
-        path: '/tmp/file.txt',
-        content: 'ABC'
+async function test_cat(ipfs) {
+    for await (const chunk of ipfs.cat('QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg/add.doc')) {
+        console.info(chunk)
       }
-      
-      const result = await ipfs.add(file)
-      
-      console.info(result)
-      
-      /*
-      Prints:
-      {
-        "path": "tmp",
-        "cid": CID("QmWXdjNC362aPDtwHPUE9o2VMqPeNeCQuTBTv1NsKtwypg"),
-        "mode": 493,
-        "mtime": { secs: Number, nsecs: Number },
-        "size": 67
-      }
-      */      
 }
 
-async function get_a_file(ipfs, encrypt_ipfs_file_path, event){
-    ipfs_file_path = decrypt_path(encrypt_ipfs_file_path)
+async function test_ls(ipfs){
+    const cid = 'QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg'
 
-    for await (const file of ipfs.get(ipfs_file_path)) {
+for await (const file of ipfs.ls(cid)) {
+  console.log(file.path)
+}
+}
+
+async function test_get(ipfs) {
+    const cid = 'QmbG42ZzGtudz4W1jyvxZhrFyP2EwhKRkCeWmBPs5mSusg/add.doc'
+
+for await (const file of ipfs.get(cid)) {
+  console.log(file.type, file.path)
+
+  if (!file.content) continue;
+
+  const content = []
+
+  for await (const chunk of file.content) {
+    content.push(chunk)
+  }
+
+  console.log(content)
+}
+} 
+
+async function get_a_file(ipfs, encrypt_ipfs_file_cid, event){
+    let cid_with_mark = decrypt_path(encrypt_ipfs_file_cid)
+
+    let ipfs_file_cid = cid_with_mark.substr(1)
+
+    let ipfs_file_cidwpath
+
+    for await (const file of ipfs.ls(ipfs_file_cid)) {
+        ipfs_file_cidwpath = file.path
+      }
+
+    for await (const file of ipfs.get(ipfs_file_cidwpath)) {
         file_type = file.type
       
         if (!file.content) continue;
@@ -157,10 +175,6 @@ async function get_a_file(ipfs, encrypt_ipfs_file_path, event){
         }
         
         file_info = {"content": content, "file_type": file_type}
-        console.log(file_info["content"])
-        console.log(file.path)
-        let content_data =uint8ArrayConcat(file_info["content"]).toString()
-        console.log(content_data)
         event.returnValue = file_info
     }
 }

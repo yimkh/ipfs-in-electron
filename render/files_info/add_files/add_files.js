@@ -27,7 +27,6 @@ add_file_btn.onclick = () => {
 
         //send file_info
         let file_info = {"file_mark":file_mark, "file_path": file_path, "file_relative_path": file_relative_path, "file_name":file_name, "file_content": reader.result}
-        console.log(file_info)
 
         let encrypt_ipfs_file_path = ipcRenderer.sendSync('add_file_info_message', file_info)
 
