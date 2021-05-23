@@ -7,8 +7,17 @@
 </head>
 <body style="background: white;">
     <h1>Hello IPFS!</h1>
-    <a id="node_info" href="./render/node_info/node_info.html">node_info</a>
-    <br>
-    <a id="files_info" href="./render/files_info/files_info.html">files_info</a>
+    <button id="node_info_btn">node_info</button><br>
+    <button id="files_info_btn">files_info</button>
+    <script>
+        let node_info_btn = document.querySelector("#node_info_btn")
+        node_info_btn.onclick = () => {
+            location.href="./render/node_info/node_info.html"
+        }
+        let files_info_btn = document.querySelector("#files_info_btn")
+        files_info_btn.onclick = () => {
+            location.href="./render/files_info/files_info.html"
+        }
+    </script>
 </body>
 </html>
